@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17324D">
+<title>حضور</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#F4F6F9; --card:#FFFFFF; --ink:#152232; --muted:#5B6B7D; --line:#DCE3EB; --soft:#EDF1F6;
+  --brand:#17324D; --brand-ink:#FFFFFF; --brand-soft:#D9E4EF;
+  --abs:#B3261E; --abs-bg:#FADCD9; --late:#9A5B00; --late-bg:#FCEBCF; --uni:#6B4BA8; --uni-bg:#E8E0F7;
+  --leave:#0F6B6B; --leave-bg:#D6EFEE; --ok:#1F6B34; --ok-bg:#DCEEDF;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0D1520; --card:#15202D; --ink:#E5ECF3; --muted:#93A3B4; --line:#26333F; --soft:#1B2735;
+    --brand:#12283D; --brand-ink:#EAF2F8; --brand-soft:#1D3348;
+    --abs:#FF9E94; --abs-bg:#3F1F1D; --late:#F2BC74; --late-bg:#3B2C14; --uni:#C3AEF0; --uni-bg:#2C2440;
+    --leave:#7FD6D0; --leave-bg:#143333; --ok:#86CE96; --ok-bg:#16301D;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif;font-size:14.5px}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:680px;margin:0 auto;padding:0 14px 104px}
+header.top{position:sticky;top:0;z-index:20;background:var(--brand);color:var(--brand-ink);padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top))}
+header.top .r{display:flex;align-items:center;gap:8px}
+header.top h1{font-size:16px;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.top .sub{font-size:11.5px;opacity:.85;margin-top:2px}
+.ib{background:transparent;border:0;color:inherit;width:38px;height:38px;border-radius:10px;font-size:18px;display:grid;place-items:center;cursor:pointer}
+nav.bot{position:fixed;inset-inline:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding:6px 6px;padding-bottom:calc(6px + env(safe-area-inset-bottom));display:flex;gap:2px}
+nav.bot button{flex:1;border:0;background:none;color:var(--muted);font-size:10.5px;padding:6px 2px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav.bot button b{font-size:16px;font-weight:400;line-height:1}
+nav.bot button[aria-current=page]{background:var(--brand-soft);color:var(--brand);font-weight:700}
+@media (prefers-color-scheme: dark){nav.bot button[aria-current=page]{color:var(--brand-ink)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;margin:12px 0}
+.card h2{font-size:15px;margin:0 0 8px}
+.note{font-size:12.5px;color:var(--muted);line-height:1.8}
+.note b{color:var(--ink)}
+.hint{font-size:11.5px;color:var(--muted);margin:6px 2px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tile{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.tile .n{font-size:24px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .l{font-size:12px;color:var(--muted);margin-top:2px}
+.tile.a{background:var(--abs-bg);border-color:transparent} .tile.a .n{color:var(--abs)}
+.tile.t{background:var(--late-bg);border-color:transparent} .tile.t .n{color:var(--late)}
+.tile.u{background:var(--uni-bg);border-color:transparent} .tile.u .n{color:var(--uni)}
+.tile.l{background:var(--leave-bg);border-color:transparent} .tile.l .n{color:var(--leave)}
+table.tb{width:100%;border-collapse:collapse;font-size:13px}
+table.tb th,table.tb td{border-bottom:1px solid var(--line);padding:8px 3px;text-align:center;font-variant-numeric:tabular-nums}
+table.tb th:first-child,table.tb td:first-child{text-align:right}
+.pill{display:inline-block;min-width:24px;border-radius:7px;padding:2px 6px;font-size:12px;font-weight:700}
+.pill.z{background:var(--soft);color:var(--muted)} .pill.a{background:var(--abs-bg);color:var(--abs)}
+.pill.t{background:var(--late-bg);color:var(--late)} .pill.u{background:var(--uni-bg);color:var(--uni)}
+.pill.l{background:var(--leave-bg);color:var(--leave)} .pill.ok{background:var(--ok-bg);color:var(--ok)}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:9px 13px;font-size:13.5px;cursor:pointer}
+.btn.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);font-weight:700}
+.btn.sm{padding:6px 10px;font-size:12.5px}
+.btn.danger{color:var(--abs);border-color:var(--abs)}
+.btn.wide{width:100%}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 12px;font-size:13px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);font-weight:700}
+input[type=search],input[type=text],input[type=tel],input[type=email],input[type=password],input[type=time],input[type=month],select{width:100%;border:1px solid var(--line);background:var(--card);border-radius:11px;padding:10px 11px}
+.field{display:flex;flex-direction:column;gap:5px;margin:9px 0}
+.field label{font-size:12.5px;color:var(--muted)}
+.list{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.st{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);min-height:54px}
+.st:last-child{border-bottom:0}
+.num{width:20px;text-align:center;color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums}
+.nm{flex:1;min-width:0;font-size:13.5px;line-height:1.3;background:none;border:0;text-align:right;padding:0;cursor:pointer;font-family:inherit}
+.nm small{display:block;color:var(--muted);font-size:11px}
+.seg{display:flex;gap:4px}
+.seg button{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:9px;width:40px;height:40px;font-size:14px;font-weight:700;cursor:pointer;padding:0}
+.seg button[aria-pressed=true].p{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.seg button[aria-pressed=true].x{background:var(--abs-bg);color:var(--abs);border-color:transparent}
+.seg button[aria-pressed=true].e{background:var(--brand-soft);color:var(--brand);border-color:transparent}
+@media (prefers-color-scheme: dark){.seg button[aria-pressed=true].e{color:var(--brand-ink)}}
+.flag{font-size:11px;border-radius:6px;padding:2px 5px;margin-inline-start:4px;white-space:nowrap}
+.flag.t{background:var(--late-bg);color:var(--late)} .flag.u{background:var(--uni-bg);color:var(--uni)}
+.flag.l{background:var(--leave-bg);color:var(--leave)} .flag.a{background:var(--abs-bg);color:var(--abs)}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.big button{border:1px solid var(--line);border-radius:12px;padding:14px 8px;font-size:14px;font-weight:700;cursor:pointer;background:var(--card)}
+.big button.t{background:var(--late-bg);color:var(--late);border-color:transparent}
+.big button.u{background:var(--uni-bg);color:var(--uni);border-color:transparent}
+.big button.l{background:var(--leave-bg);color:var(--leave);border-color:transparent}
+.by{font-size:11px;color:var(--muted);margin-top:4px}
+.msg{background:var(--soft);border-radius:10px;padding:10px;font-size:12.5px;white-space:pre-wrap;line-height:1.75;margin-top:8px}
+.kv{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.kv:last-child{border-bottom:0}
+.banner{border-radius:12px;padding:10px 12px;margin:12px 0;font-size:12.5px;line-height:1.75;border:1px solid}
+.banner.info{background:var(--brand-soft);border-color:var(--brand)}
+.banner.warn{background:var(--late-bg);border-color:var(--late)}
+.banner.err{background:var(--abs-bg);border-color:var(--abs)}
+.toast{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom));inset-inline:0;margin-inline:auto;width:max-content;max-width:90vw;background:var(--ink);color:var(--bg);padding:10px 15px;border-radius:11px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+.toast.on{opacity:1}
+.login{max-width:380px;margin:8vh auto;padding:0 18px}
+.login h1{font-size:20px;text-align:center;margin:0 0 4px}
+.login p{text-align:center;color:var(--muted);font-size:13px;margin:0 0 18px}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="toast" id="toast"></div>
+<script src="supabase.js"></script>
+<script src="xlsx.full.min.js" defer></script>
+<script>
+'use strict';
+/* ===================== الاتصال ===================== */
+const SB_URL = 'https://rdncrnxmcynznvtcvpid.supabase.co';
+const SB_KEY = 'sb_publishable_Ykvo7u7RSIpSBI45nWY8rQ_wXYsgume';
+const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth:{ persistSession:true, autoRefreshToken:true, storageKey:'hd-auth' } });
+
+const CK = 'hd-cache-v1', QK = 'hd-queue-v1';
+const $ = id => document.getElementById(id);
+const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => String(s||'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim();
+const today = () => new Date().toLocaleDateString('en-CA');
+const nowHM = () => new Date().toTimeString().slice(0,5);
+const AR_DAYS = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const AR_MON = ['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'];
+function dayLabel(d){ const x=new Date(d+'T00:00:00'); return `${AR_DAYS[x.getDay()]} ${x.getDate()} ${AR_MON[x.getMonth()]} ${x.getFullYear()}`; }
+function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('on'),2600); }
+const lsGet = k => { try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } };
+const lsSet = (k,v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+
+/* ===================== الحالة ===================== */
+let ME = null;                  // {id, email, name}
+let DB = { sections:[], students:[], settings:{}, users:{} };
+let DAY = today();
+let REC = {};                   // student_id -> attendance row
+let MARKS = {};                 // section_id -> true
+let SENT = {};                  // student_id -> sent_at (لهذا اليوم)
+let HIST = {};                  // student_id -> {abs,late,uni,leave} للعام
+let QUEUE = lsGet(QK) || [];
+let view = { t:'today' };
+let busy = false, flushing = false;
+
+/* ===================== طابور الحفظ (يعمل بلا إنترنت) ===================== */
+function saveQ(){ lsSet(QK, QUEUE); }
+function pending(){ return QUEUE.length; }
+async function enqueue(job){ QUEUE.push(job); saveQ(); render(); flush(); }
+async function flush(){
+  if(flushing || !QUEUE.length) return;
+  if(!navigator.onLine) return;
+  flushing = true;
+  while(QUEUE.length){
+    const j = QUEUE[0];
+    let res;
+    if(j.op === 'insert') res = await sb.from(j.t).insert(j.row);
+    else if(j.op === 'update') res = await sb.from(j.t).update(j.row).eq('id', j.id);
+    else res = await sb.from(j.t).upsert(j.row, { onConflict:j.conflict });
+    if(res.error){
+      if(!navigator.onLine) break;
+      toast('تعذّر الحفظ: ' + res.error.message);
+      break;
+    }
+    QUEUE.shift(); saveQ();
+  }
+  flushing = false;
+  if(!QUEUE.length) await loadDay(true);
+  render();
+}
+window.addEventListener('online', ()=>{ toast('عاد الاتصال — جارٍ الإرسال'); flush(); });
+
+/* ===================== التحميل ===================== */
+async function loadBase(force){
+  const c = lsGet(CK);
+  if(c && !force){ DB = c; }
+  if(!navigator.onLine) return;
+  const [se, st, cf, us] = await Promise.all([
+    sb.from('sections').select('id,name').order('id'),
+    sb.from('students').select('id,name,section_id,guardian_phone,phone_verified,active').eq('active', true).order('name'),
+    sb.from('settings').select('key,value'),
+    sb.from('app_users').select('id,name')
+  ]);
+  if(se.error || st.error){ toast('تعذّر تحميل البيانات: ' + ((se.error||st.error).message)); return; }
+  DB.sections = se.data || [];
+  DB.students = st.data || [];
+  DB.settings = {}; (cf.data||[]).forEach(r=> DB.settings[r.key] = r.value);
+  DB.users = {}; (us.data||[]).forEach(u=> DB.users[u.id] = u.name);
+  lsSet(CK, DB);
+}
+async function loadDay(silent){
+  if(!navigator.onLine){ if(!silent) toast('لا إنترنت — تُعرض آخر نسخة محفوظة'); return; }
+  const [at, mk, nt] = await Promise.all([
+    sb.from('attendance').select('*').eq('day', DAY),
+    sb.from('section_marks').select('section_id').eq('day', DAY),
+    sb.from('notifications').select('student_id,sent_at').eq('day', DAY)
+  ]);
+  if(at.error){ if(!silent) toast('تعذّر تحميل سجل اليوم'); return; }
+  REC = {}; (at.data||[]).forEach(r => REC[r.student_id] = r);
+  MARKS = {}; (mk.data||[]).forEach(r => MARKS[r.section_id] = true);
+  SENT = {}; (nt.data||[]).forEach(r => SENT[r.student_id] = r.sent_at);
+}
+async function loadHist(ids){
+  if(!navigator.onLine || !ids.length) return;
+  const r = await sb.from('attendance').select('student_id,status,late_at,uniform_violation,leave_at').in('student_id', ids);
+  if(r.error) return;
+  ids.forEach(i => HIST[i] = {abs:0, late:0, uni:0, leave:0});
+  (r.data||[]).forEach(x=>{ const h=HIST[x.student_id]; if(!h) return;
+    if(x.status==='absent') h.abs++; if(x.late_at) h.late++; if(x.uniform_violation) h.uni++; if(x.leave_at) h.leave++; });
+}
+
+/* ===================== مساعدات ===================== */
+const cutoff = () => DB.settings.late_cutoff || '07:55';
+const notifyTime = () => DB.settings.notify_time || '08:45';
+const school = () => DB.settings.school || 'المدرسة';
+const secName = id => (DB.sections.find(s=>s.id===id)||{}).name || '';
+const studs = sec => DB.students.filter(s => s.section_id === sec);
+const rec = id => REC[id] || {student_id:id, day:DAY, status:'present', uniform_violation:false};
+const who = uid => DB.users[uid] || '';
+const isLate = t => t > cutoff();
+function waNum(p){ let d=String(p||'').replace(/\D/g,''); if(d.startsWith('00')) d=d.slice(2);
+  if(d.startsWith('962')) return d.length>=12? d : null; if(d.startsWith('0')) d=d.slice(1);
+  return (d.length===9 && d.startsWith('7')) ? '962'+d : null; }
+function flagged(sec){
+  return DB.students.filter(s => (sec===undefined || s.section_id===sec)).filter(s=>{
+    const r = REC[s.id]; return r && (r.status!=='present' || r.late_at || r.uniform_violation || r.leave_at);
+  });
+}
+function secStats(sec){
+  const list = studs(sec); let a=0,e=0,t=0,u=0,l=0;
+  list.forEach(s=>{ const r=REC[s.id]; if(!r) return;
+    if(r.status==='absent')a++; if(r.status==='excused')e++; if(r.late_at)t++; if(r.uniform_violation)u++; if(r.leave_at)l++; });
+  return {n:list.length, a,e,t,u,l, marked:!!MARKS[sec]};
+}
+function totals(){ return DB.sections.reduce((o,s)=>{ const x=secStats(s.id);
+  ['n','a','e','t','u','l'].forEach(k=>o[k]+=x[k]); return o; }, {n:0,a:0,e:0,t:0,u:0,l:0}); }
+
+/* ===================== الكتابة ===================== */
+function setAtt(sid, patch){
+  const cur = rec(sid);
+  REC[sid] = Object.assign({}, cur, patch);
+  enqueue({ t:'attendance', op:'upsert', conflict:'student_id,day', row: Object.assign({student_id:sid, day:DAY}, patch) });
+}
+function markSection(sec){
+  MARKS[sec] = true;
+  enqueue({ t:'section_marks', op:'upsert', conflict:'section_id,day', row:{section_id:sec, day:DAY, marked_by:ME.id} });
+}
+function setPhone(sid, phone, verified){
+  const s = DB.students.find(x=>x.id===sid); if(!s) return;
+  s.guardian_phone = phone || null; if(verified!==undefined) s.phone_verified = verified;
+  lsSet(CK, DB);
+  enqueue({ t:'students', op:'update', id:sid, row:{guardian_phone: s.guardian_phone, phone_verified: s.phone_verified} });
+}
+function setSetting(k, v){
+  DB.settings[k] = v; lsSet(CK, DB);
+  enqueue({ t:'settings', op:'upsert', conflict:'key', row:{key:k, value:v} });
+}
+
+/* ===================== التنقل ===================== */
+const TABS = [['today','⌂','اليوم'],['secs','☰','الشعب'],['gate','⏱','البوابة'],['leave','⇥','مغادرة'],['msg','✉','إشعارات'],['more','⋯','المزيد']];
+function go(t, extra){ view = Object.assign({t}, extra||{}); render(); window.scrollTo(0,0); }
+
+/* ===================== العرض ===================== */
+function render(){
+  if(!ME){ $('root').innerHTML = vLogin(); return; }
+  const V = { today:vToday, secs:vSecs, sec:vSec, gate:vGate, leave:vLeave, msg:vMsg, more:vMore,
+              students:vStudents, stu:vStu, report:vReport, settings:vSettings }[view.t] || vToday;
+  const body = V();
+  $('root').innerHTML = `
+  <header class="top"><div class="r">
+    ${view.t==='today'?'':'<button class="ib" data-a="back" aria-label="رجوع">→</button>'}
+    <div class="grow"><h1>${esc(HEAD.t)}</h1><div class="sub">${esc(HEAD.s||'')}</div></div>
+    <button class="ib" data-a="refresh" aria-label="تحديث">↻</button>
+  </div></header>
+  <main class="wrap">
+    ${pending()? `<div class="banner warn">${pending()} تعديل في انتظار الإرسال${navigator.onLine?' — جارٍ المحاولة':' (لا إنترنت)'}</div>`:''}
+    ${body}
+  </main>
+  <nav class="bot">${TABS.map(([k,ic,lb])=>`<button data-tab="${k}" ${view.t===k?'aria-current="page"':''}><b>${ic}</b>${lb}</button>`).join('')}</nav>`;
+}
+let HEAD = {t:'',s:''};
+const head = (t,s)=>{ HEAD={t,s}; return ''; };
+
+/* ---------- تسجيل الدخول ---------- */
+function vLogin(){
+  return `<div class="login"><h1>سجل الحضور والغياب</h1><p>${esc(school())}</p>
+    <div class="card">
+      <div class="field"><label>البريد الإلكتروني</label><input type="email" id="lem" autocomplete="username" inputmode="email"></div>
+      <div class="field"><label>كلمة المرور</label><input type="password" id="lpw" autocomplete="current-password"></div>
+      <button class="btn pri wide" data-a="login">دخول</button>
+      <p class="hint" id="lerr"></p>
+    </div>
+    <p class="hint" style="text-align:center">الحسابات يُنشئها مساعد المدير. لا يوجد تسجيل ذاتي.</p></div>`;
+}
+
+/* ---------- لوحة اليوم ---------- */
+function vToday(){
+  head('لوحة اليوم', `${dayLabel(DAY)} — ${ME.name}`);
+  const T = totals();
+  const rows = DB.sections.map(s=>{ const x=secStats(s.id);
+    return `<tr data-sec="${s.id}" style="cursor:pointer"><td>${esc(s.name)}${x.marked?' <span class="pill ok">✓</span>':''}</td><td>${x.n}</td>
+      <td><span class="pill ${x.a?'a':'z'}">${x.a}</span></td><td><span class="pill ${x.t?'t':'z'}">${x.t}</span></td>
+      <td><span class="pill ${x.u?'u':'z'}">${x.u}</span></td><td><span class="pill ${x.l?'l':'z'}">${x.l}</span></td></tr>`;}).join('');
+  const abs = DB.students.filter(s=>{ const r=REC[s.id]; return r && r.status==='absent'; });
+  const unmarked = DB.sections.filter(s=>!MARKS[s.id]);
+  const fl = flagged(); const unsent = fl.filter(s=>!SENT[s.id]);
+  return `
+  ${nowHM() >= notifyTime() && unsent.length ? `<div class="banner info">حان وقت الإشعار (${esc(notifyTime())}): <b>${unsent.length}</b> ولي أمر لم يُرسل له بعد.
+     <div style="margin-top:8px"><button class="btn pri sm" data-a="tab" data-tab="msg">فتح الإشعارات</button></div></div>`:''}
+  <div class="tiles">
+    <div class="tile a"><div class="n">${T.a}</div><div class="l">غياب${T.e?` · و${T.e} بعذر`:''}</div></div>
+    <div class="tile t"><div class="n">${T.t}</div><div class="l">تأخير صباحي</div></div>
+    <div class="tile u"><div class="n">${T.u}</div><div class="l">مخالفة زي</div></div>
+    <div class="tile l"><div class="n">${T.l}</div><div class="l">مغادرة</div></div>
+  </div>
+  <div class="card"><h2>الشعب</h2>
+    <div style="overflow-x:auto"><table class="tb"><thead><tr><th>الشعبة</th><th>العدد</th><th>غياب</th><th>تأخير</th><th>زي</th><th>مغادرة</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="hint">اضغط الشعبة للانتقال إلى رصدها. ✓ تعني أن رصدها مثبَّت اليوم.</p>
+    ${unmarked.length? `<div class="note" style="margin-top:6px">لم يُثبَّت رصد: ${unmarked.map(s=>esc(s.name)).join(' · ')}</div>`:'<div class="note" style="margin-top:6px">رصد جميع الشعب مثبَّت ✓</div>'}
+    <div class="row" style="margin-top:8px"><span class="note grow">نسبة الحضور: <b>${T.n? Math.round((T.n-T.a-T.e)/T.n*100):0}%</b> من ${T.n} طالباً</span></div>
+  </div>
+  <div class="card"><h2>غائبو اليوم (${abs.length})</h2>
+    ${abs.length? abs.map(s=>`<div class="kv"><span>${esc(s.name)}</span><span class="pill a">${esc(secName(s.section_id))}</span></div>`).join('')
+      + `<div class="row" style="margin-top:10px"><button class="btn pri" data-a="tab" data-tab="msg">إشعار أولياء الأمور</button>
+         <button class="btn" data-a="copyAbs">نسخ القائمة</button></div>
+         <p class="hint">القائمة جاهزة لإدخالها في منصة أجيال.</p>` : '<p class="note">لا غياب مرصود اليوم.</p>'}
+  </div>`;
+}
+
+/* ---------- الشعب ---------- */
+function vSecs(){
+  head('رصد الشعب', dayLabel(DAY));
+  return `<div class="list">${DB.sections.map(s=>{ const x=secStats(s.id);
+    return `<div class="st" data-sec="${s.id}" style="cursor:pointer"><span class="num">${x.n}</span>
+      <span class="nm"><b>${esc(s.name)}</b><small>${x.marked? `غياب ${x.a} · تأخير ${x.t} · زي ${x.u}` : 'لم يُثبَّت الرصد بعد'}</small></span>
+      <span class="pill ${x.marked? (x.a?'a':'ok') : 'z'}">${x.marked? (x.a? x.a+' غائب':'مكتمل') : '—'}</span></div>`;}).join('')}</div>`;
+}
+function vSec(){
+  const sec = view.sec; const list = studs(sec); const x = secStats(sec);
+  head('شعبة '+secName(sec), `${dayLabel(DAY)} — ${x.n} طالباً`);
+  return `<div class="card" style="padding:10px 12px">
+    <div class="row"><b class="grow">${esc(secName(sec))}</b><span class="note">غياب ${x.a} · بعذر ${x.e} · تأخير ${x.t}</span></div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn sm pri" data-a="markSec" data-sec="${sec}">${x.marked? 'تثبيت الرصد مرة أخرى':'تثبيت رصد الشعبة ✓'}</button>
+      <span class="note grow" style="text-align:left">${x.marked? 'مثبَّت':'الافتراضي: الجميع حاضر'}</span></div>
+    <p class="hint">ح = حاضر · غ = غائب · ع = غياب بعذر. علامات التأخير والزي والمغادرة تأتي من البوابة والإدارة.</p></div>
+  <div class="list">${list.map((s,i)=>{ const r = rec(s.id);
+    return `<div class="st"><span class="num">${i+1}</span>
+      <button class="nm" data-a="stu" data-id="${s.id}">${esc(s.name)}
+        ${r.late_at?`<span class="flag t">متأخر ${esc(String(r.late_at).slice(0,5))}</span>`:''}
+        ${r.uniform_violation?'<span class="flag u">زي</span>':''}
+        ${r.leave_at?`<span class="flag l">مغادرة ${esc(String(r.leave_at).slice(0,5))}</span>`:''}
+        ${r.by_status? `<small>رصده ${esc(who(r.by_status))}</small>`:''}</button>
+      <span class="seg">
+        <button class="p" data-a="att" data-id="${s.id}" data-v="present" aria-pressed="${r.status==='present'}">ح</button>
+        <button class="x" data-a="att" data-id="${s.id}" data-v="absent" aria-pressed="${r.status==='absent'}">غ</button>
+        <button class="e" data-a="att" data-id="${s.id}" data-v="excused" aria-pressed="${r.status==='excused'}">ع</button>
+      </span></div>`;}).join('')}</div>`;
+}
+
+/* ---------- البحث المشترك ---------- */
+function searchBox(ph){ return `<div class="card" style="padding:10px 12px"><input type="search" id="q" placeholder="${ph}" value="${esc(view.q||'')}" autocomplete="off" enterkeyhint="search"></div>`; }
+function results(){
+  const q = norm(view.q||''); if(q.length < 2) return [];
+  return DB.students.filter(s => norm(s.name).includes(q)).slice(0, 15);
+}
+
+/* ---------- البوابة ---------- */
+function vGate(){
+  head('البوابة الصباحية', `${dayLabel(DAY)} — الآن ${nowHM()}`);
+  const t = nowHM(); const late = isLate(t);
+  const r2 = results();
+  const T = totals();
+  return `<div class="card" style="padding:10px 12px">
+      <div class="row"><span class="note grow">ساعة الدوام <b>${esc(cutoff())}</b> — الآن <b>${esc(t)}</b>
+        ${late? '<span class="pill t">أي دخول الآن = تأخير</span>':'<span class="pill ok">الدخول الآن في الوقت</span>'}</span></div></div>
+    ${searchBox('اكتب حرفين من اسم الطالب الداخل...')}
+    <div class="row"><span class="pill t">متأخرون: ${T.t}</span><span class="pill u">مخالفات زي: ${T.u}</span></div>
+    ${r2.length? r2.map(s=>{ const r = rec(s.id);
+      return `<div class="card" style="padding:12px"><div class="row"><b class="grow">${esc(s.name)}</b><span class="pill z">${esc(secName(s.section_id))}</span></div>
+        <div class="note">${r.late_at? `سُجّل متأخراً ${esc(String(r.late_at).slice(0,5))}` : (r.status==='absent'?'مسجَّل غائباً':'لا تسجيل اليوم')}${r.uniform_violation?' · مخالفة زي':''}</div>
+        <div class="big">
+          <button class="${late?'t':''}" data-a="checkin" data-id="${s.id}">${late? `تسجيل تأخير (${t})` : 'تسجيل حضور'}</button>
+          <button class="u" data-a="uni" data-id="${s.id}">${r.uniform_violation? 'إلغاء مخالفة الزي':'مخالفة زي'}</button>
+          ${r.late_at? `<button data-a="undolate" data-id="${s.id}">إلغاء التأخير</button>`:''}
+        </div>
+        ${r.by_late||r.by_uniform? `<div class="by">آخر تعديل: ${esc(who(r.by_late||r.by_uniform))}</div>`:''}</div>`;}).join('')
+      : `<p class="note" style="text-align:center;padding:18px 0">${(view.q||'').length? 'لا نتائج':'ابدأ بالكتابة للبحث'}</p>`}`;
+}
+
+/* ---------- المغادرات ---------- */
+function vLeave(){
+  head('المغادرات', dayLabel(DAY));
+  const reasons = DB.settings.leave_reasons || ['ولي الأمر','مرض','موعد رسمي','سبب آخر'];
+  const r2 = results();
+  const outs = DB.students.filter(s=>{ const r=REC[s.id]; return r && r.leave_at; });
+  return `${searchBox('اكتب حرفين من اسم الطالب...')}
+    ${r2.map(s=>{ const r = rec(s.id);
+      return `<div class="card" style="padding:12px"><div class="row"><b class="grow">${esc(s.name)}</b><span class="pill z">${esc(secName(s.section_id))}</span></div>
+      ${r.leave_at? `<div class="note">مغادر منذ ${esc(String(r.leave_at).slice(0,5))} — ${esc(r.leave_reason||'')}</div>
+        <div class="big"><button data-a="unleave" data-id="${s.id}">إلغاء المغادرة</button></div>`
+      : `<p class="note">سبب المغادرة:</p><div class="big">${reasons.map(x=>`<button class="l" data-a="leave" data-id="${s.id}" data-r="${esc(x)}">${esc(x)}</button>`).join('')}</div>`}</div>`;}).join('')}
+    <div class="card"><h2>مغادرو اليوم (${outs.length})</h2>
+      ${outs.length? outs.map(s=>{ const r=REC[s.id];
+        return `<div class="kv"><span>${esc(s.name)} <span class="pill z">${esc(secName(s.section_id))}</span></span>
+          <span class="pill l">${esc(String(r.leave_at).slice(0,5))} · ${esc(r.leave_reason||'')}</span></div>`;}).join('')
+        : '<p class="note">لا مغادرات اليوم.</p>'}</div>`;
+}
+
+/* ---------- الإشعارات ---------- */
+function groupByGuardian(list){
+  const g = {};
+  list.forEach(s=>{ const k = waNum(s.guardian_phone) || ('na-'+s.id); (g[k] = g[k] || []).push(s); });
+  return Object.entries(g).map(([k,ss]) => ({ phone: k.startsWith('na-')? null : k, students: ss }));
+}
+function msgFor(group){
+  const L = [];
+  L.push('السلام عليكم ورحمة الله وبركاته،');
+  L.push(group.students.length>1 ? 'حضرة ولي الأمر المحترم،' : 'حضرة ولي أمر الطالب المحترم،');
+  L.push(`تقرير ${dayLabel(DAY)} — ${school()}`);
+  group.students.forEach(s=>{
+    const r = rec(s.id); const lines = [];
+    if(r.status==='absent') lines.push('تغيّب عن المدرسة اليوم دون إشعار مسبق');
+    if(r.status==='excused') lines.push('غيابه اليوم مثبت بعذر');
+    if(r.late_at) lines.push(`دخل المدرسة متأخراً الساعة ${String(r.late_at).slice(0,5)} (بداية الدوام ${cutoff()})`);
+    if(r.uniform_violation) lines.push('حضر بزي غير مطابق للزي المدرسي');
+    if(r.leave_at) lines.push(`غادر المدرسة الساعة ${String(r.leave_at).slice(0,5)} (${r.leave_reason||''})`);
+    const h = HIST[s.id];
+    L.push('');
+    L.push(`*${s.name}* — ${secName(s.section_id)}`);
+    lines.forEach(x=>L.push('• ' + x));
+    if(h) L.push(`المجموع منذ بداية العام: غياب ${h.abs} · تأخير ${h.late} · مخالفة زي ${h.uni}`);
+  });
+  L.push('', 'نرجو متابعة ذلك، ولكم الشكر.', 'إدارة ' + school());
+  return L.join('\n');
+}
+function vMsg(){
+  head('إشعارات أولياء الأمور', dayLabel(DAY));
+  const groups = groupByGuardian(flagged());
+  const done = groups.filter(g => g.students.every(s=>SENT[s.id])).length;
+  return `<div class="card" style="padding:10px 12px"><div class="row">
+      <span class="note grow">أولياء أمور: <b>${groups.length}</b> · أُرسل: <b>${done}</b></span>
+      <span class="pill ${nowHM()>=notifyTime()?'ok':'z'}">وقت الإشعار ${esc(notifyTime())}</span></div>
+      <p class="hint">أبناء ولي الأمر الواحد في رسالة واحدة. الضغط على «إرسال» يفتح واتساب على رقمه بالنص جاهزاً، ثم اضغط إرسال في واتساب وارجع.</p></div>
+    <div class="list">${groups.map(g=>{
+      const sent = g.students.every(s=>SENT[s.id]);
+      const names = g.students.map(s=>esc(s.name)).join(' + ');
+      const tags = g.students.map(s=>{ const r=rec(s.id); return [
+        r.status==='absent'?'<span class="flag a">غياب</span>':'', r.status==='excused'?'<span class="flag l">بعذر</span>':'',
+        r.late_at?'<span class="flag t">تأخير</span>':'', r.uniform_violation?'<span class="flag u">زي</span>':'',
+        r.leave_at?'<span class="flag l">مغادرة</span>':''].join(''); }).join('');
+      const ids = g.students.map(s=>s.id).join(',');
+      return `<div class="st" style="flex-wrap:wrap"><span class="num"></span>
+        <button class="nm" data-a="stu" data-id="${g.students[0].id}">${names} ${tags}
+          <small>${esc(secName(g.students[0].section_id))} · ${g.phone? '<bdi dir="ltr">'+esc(g.students[0].guardian_phone)+'</bdi>' : 'لا يوجد رقم'}</small></button>
+        ${sent? '<span class="pill ok">✓ أُرسل</span>':''}
+        ${g.phone? `<button class="btn sm ${sent?'':'pri'}" data-a="send" data-ids="${ids}">${sent?'إعادة':'إرسال'}</button>`
+          : `<button class="btn sm danger" data-a="tab" data-tab="students">أضف رقماً</button>`}
+        ${view.open===ids? `<div class="msg" style="width:100%">${esc(msgFor(g))}</div>
+           <div class="row" style="width:100%;margin-top:6px"><button class="btn sm" data-a="copyMsg" data-ids="${ids}">نسخ النص</button>
+           <button class="btn sm" data-a="markSent" data-ids="${ids}">تثبيت أنه أُرسل</button></div>`:''}</div>`;}).join('')
+      || '<div class="st"><span class="note">لا إشعارات اليوم.</span></div>'}</div>`;
+}
+
+/* ---------- المزيد ---------- */
+function vMore(){
+  head('المزيد', ME.name);
+  return `<div class="list">
+    ${[['students','👥','الطلاب وأرقام أولياء الأمور'],['report','📊','التقرير الشهري والتصدير'],['settings','⚙','الإعدادات']]
+      .map(([k,ic,lb])=>`<div class="st" data-a="tab" data-tab="${k}" style="cursor:pointer"><span class="num">${ic}</span><span class="nm">${lb}</span><span class="note">›</span></div>`).join('')}
+    <div class="st" data-a="logout" style="cursor:pointer"><span class="num">⎋</span><span class="nm">تسجيل الخروج</span></div>
+  </div>
+  <div class="card"><h2>عن البيانات</h2><p class="note">${DB.students.length} طالباً في ${DB.sections.length} شعب · المستخدمون: ${Object.keys(DB.users).length}
+    <br>آخر تحديث للقائمة المحلية: عند كل فتح مع وجود إنترنت. الرصد يُحفظ على الخادم فوراً، وعند انقطاع الشبكة يُخزَّن ويُرسل لاحقاً.</p></div>`;
+}
+
+/* ---------- الطلاب والأرقام ---------- */
+function vStudents(){
+  head('الطلاب وأرقام أولياء الأمور', `${DB.students.length} طالباً`);
+  const need = DB.students.filter(s=>{ const n = waNum(s.guardian_phone);
+    const dup = s.guardian_phone && DB.students.filter(x=>x.guardian_phone===s.guardian_phone).length > 3;
+    return !n || dup; });
+  const q = norm(view.q||'');
+  const list = view.need ? need : (q.length>=2 ? DB.students.filter(s=>norm(s.name).includes(q)) : []);
+  return `<div class="card" style="padding:10px 12px">
+      <div class="row"><button class="chip" data-a="needToggle" aria-pressed="${!!view.need}">أرقام تحتاج تحقق (${need.length})</button></div>
+      <div style="margin-top:8px"><input type="search" id="q" placeholder="ابحث عن طالب..." value="${esc(view.q||'')}"></div>
+      <p class="hint">عدّل الرقم ثم اضغط «تحقق» بعد أن تتأكد أن عليه واتساب. الأرقام المكررة للإخوة طبيعية؛ ما يُعرض هنا هو الفارغ والخاطئ والمكرر على أكثر من ثلاثة طلاب.</p></div>
+    <div class="list">${list.length? list.map(s=>{
+      const ok = !!waNum(s.guardian_phone);
+      return `<div class="st" style="flex-wrap:wrap"><span class="num"></span>
+        <button class="nm" data-a="stu" data-id="${s.id}">${esc(s.name)}<small>${esc(secName(s.section_id))}</small></button>
+        ${s.phone_verified? '<span class="pill ok">✓ متحقق</span>' : (ok? '<span class="pill z">غير متحقق</span>':'<span class="pill a">رقم ناقص</span>')}
+        <div class="row" style="width:100%;padding-inline-start:20px">
+          <input type="tel" inputmode="tel" dir="ltr" data-in="phone" data-id="${s.id}" value="${esc(s.guardian_phone||'')}" placeholder="07xxxxxxxx" style="flex:1;min-width:130px">
+          ${ok? `<button class="btn sm" data-a="waTest" data-id="${s.id}">واتساب</button>
+                 <button class="btn sm ${s.phone_verified?'':'pri'}" data-a="verify" data-id="${s.id}">${s.phone_verified?'إلغاء':'تحقق'}</button>`:''}
+        </div></div>`;}).join('') : `<div class="st"><span class="note">${view.need? 'لا أرقام تحتاج تحقق.' : 'اكتب حرفين للبحث، أو اضغط زر «أرقام تحتاج تحقق».'}</span></div>`}</div>`;
+}
+
+/* ---------- ملف الطالب ---------- */
+function vStu(){
+  const s = DB.students.find(x=>x.id===view.id);
+  if(!s) return '<div class="card">الطالب غير موجود.</div>';
+  head(s.name, secName(s.section_id));
+  const r = rec(s.id); const h = HIST[s.id];
+  return `<div class="card">
+    <div class="tiles">
+      <div class="tile a"><div class="n">${h? h.abs : '—'}</div><div class="l">أيام غياب</div></div>
+      <div class="tile t"><div class="n">${h? h.late : '—'}</div><div class="l">مرات تأخير</div></div>
+      <div class="tile u"><div class="n">${h? h.uni : '—'}</div><div class="l">مخالفات زي</div></div>
+      <div class="tile l"><div class="n">${h? h.leave : '—'}</div><div class="l">مغادرات</div></div>
+    </div><p class="hint">المجموع منذ بداية العام الدراسي.</p></div>
+  <div class="card"><h2>اليوم — ${esc(dayLabel(DAY))}</h2>
+    <div class="kv"><span>الحضور</span><span class="pill ${r.status==='absent'?'a':r.status==='excused'?'l':'ok'}">${r.status==='absent'?'غائب':r.status==='excused'?'غياب بعذر':'حاضر'}</span></div>
+    <div class="kv"><span>التأخير</span><span class="pill ${r.late_at?'t':'z'}">${r.late_at? esc(String(r.late_at).slice(0,5)):'لا'}</span></div>
+    <div class="kv"><span>الزي</span><span class="pill ${r.uniform_violation?'u':'ok'}">${r.uniform_violation?'مخالف':'مطابق'}</span></div>
+    <div class="kv"><span>المغادرة</span><span class="pill ${r.leave_at?'l':'z'}">${r.leave_at? esc(String(r.leave_at).slice(0,5))+' · '+esc(r.leave_reason||''):'لا'}</span></div>
+    ${[r.by_status,r.by_late,r.by_uniform,r.by_leave].filter(Boolean).length? `<div class="by">رصده: ${[...new Set([r.by_status,r.by_late,r.by_uniform,r.by_leave].filter(Boolean).map(who))].join(' · ')}</div>`:''}
+  </div>
+  <div class="card"><h2>ولي الأمر</h2>
+    <div class="field"><label>رقم الهاتف</label><input type="tel" dir="ltr" data-in="phone" data-id="${s.id}" value="${esc(s.guardian_phone||'')}" placeholder="07xxxxxxxx"></div>
+    <div class="row">${waNum(s.guardian_phone)? `<button class="btn" data-a="waTest" data-id="${s.id}">فتح واتساب</button>
+      <button class="btn ${s.phone_verified?'':'pri'}" data-a="verify" data-id="${s.id}">${s.phone_verified?'إلغاء التحقق':'تأكيد أن عليه واتساب'}</button>`:'<span class="note">أدخل رقماً صحيحاً بصيغة 07xxxxxxxx</span>'}</div>
+  </div>
+  <div class="card"><h2>سجل الطالب</h2><div id="tl"><span class="note">جارٍ التحميل <span class="spin"></span></span></div></div>`;
+}
+async function loadTimeline(id){
+  if(!navigator.onLine){ const el=$('tl'); if(el) el.innerHTML='<span class="note">يحتاج إنترنت.</span>'; return; }
+  const r = await sb.from('attendance').select('day,status,late_at,uniform_violation,leave_at,leave_reason').eq('student_id', id).order('day',{ascending:false}).limit(30);
+  const el = $('tl'); if(!el) return;
+  if(r.error){ el.innerHTML = '<span class="note">تعذّر التحميل.</span>'; return; }
+  el.innerHTML = (r.data||[]).map(x=>{
+    const bits=[]; if(x.status==='absent')bits.push('غياب'); if(x.status==='excused')bits.push('غياب بعذر');
+    if(x.late_at)bits.push('تأخير '+String(x.late_at).slice(0,5)); if(x.uniform_violation)bits.push('مخالفة زي');
+    if(x.leave_at)bits.push('مغادرة '+String(x.leave_at).slice(0,5)+(x.leave_reason? ' · '+x.leave_reason:''));
+    return bits.length? `<div class="kv"><span class="note">${esc(x.day.slice(5).split('-').reverse().join('/'))}</span><span>${esc(bits.join(' · '))}</span></div>`:'';
+  }).join('') || '<span class="note">لا سجل سابق.</span>';
+}
+
+/* ---------- التقرير الشهري ---------- */
+function vReport(){
+  head('التقرير الشهري', view.month || '');
+  const m = view.month || DAY.slice(0,7);
+  const rows = view.rep || null;
+  return `<div class="card" style="padding:10px 12px">
+    <div class="field" style="margin:0"><label>الشهر</label><input type="month" id="mo" value="${esc(m)}"></div>
+    <div class="row" style="margin-top:8px"><button class="btn pri" data-a="runRep">استخراج</button>
+      ${rows? '<button class="btn" data-a="xl">تصدير Excel</button>':''}</div>
+    <p class="hint">يجمع الغياب والتأخير ومخالفات الزي والمغادرات لكل طالب في الشهر المحدد.</p></div>
+    ${rows? `<div class="card"><h2>الأعلى غياباً</h2><div style="overflow-x:auto"><table class="tb">
+      <thead><tr><th>الطالب</th><th>الشعبة</th><th>غياب</th><th>بعذر</th><th>تأخير</th><th>زي</th><th>مغادرة</th></tr></thead>
+      <tbody>${rows.slice(0,40).map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.sec)}</td><td>${r.abs}</td><td>${r.exc}</td><td>${r.late}</td><td>${r.uni}</td><td>${r.lv}</td></tr>`).join('')}</tbody>
+      </table></div><p class="hint">يُعرض أول 40 صفاً؛ التصدير يحتوي الجميع (${rows.length} طالباً لهم سجل).</p></div>`:''}`;
+}
+async function runReport(){
+  const m = ($('mo')||{}).value || DAY.slice(0,7);
+  if(!navigator.onLine){ toast('التقرير يحتاج إنترنت'); return; }
+  const from = m+'-01'; const d = new Date(m+'-01T00:00:00'); d.setMonth(d.getMonth()+1);
+  const to = d.toLocaleDateString('en-CA');
+  toast('جارٍ الاستخراج...');
+  const r = await sb.from('attendance').select('student_id,status,late_at,uniform_violation,leave_at').gte('day', from).lt('day', to);
+  if(r.error){ toast('تعذّر: '+r.error.message); return; }
+  const agg = {};
+  (r.data||[]).forEach(x=>{ const a = agg[x.student_id] = agg[x.student_id] || {abs:0,exc:0,late:0,uni:0,lv:0};
+    if(x.status==='absent')a.abs++; if(x.status==='excused')a.exc++; if(x.late_at)a.late++; if(x.uniform_violation)a.uni++; if(x.leave_at)a.lv++; });
+  const rows = Object.entries(agg).map(([id,a])=>{ const s = DB.students.find(x=>x.id===+id) || {name:'(محذوف)', section_id:0};
+    return Object.assign({name:s.name, sec:secName(s.section_id)}, a); })
+    .sort((x,y)=> y.abs-x.abs || y.late-x.late);
+  view.rep = rows; view.month = m; render();
+}
+function exportXl(){
+  if(typeof XLSX === 'undefined'){ toast('مكتبة Excel لم تُحمَّل'); return; }
+  const rows = view.rep || []; const m = view.month || DAY.slice(0,7);
+  const aoa = [[`تقرير الحضور والغياب — ${school()} — ${m}`], [], ['الطالب','الشعبة','غياب','غياب بعذر','تأخير','مخالفة زي','مغادرة']];
+  rows.forEach(r=>aoa.push([r.name, r.sec, r.abs, r.exc, r.late, r.uni, r.lv]));
+  const wb = XLSX.utils.book_new(); wb.Workbook = {Views:[{RTL:true}]};
+  const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!cols'] = [{wch:30},{wch:12},{wch:8},{wch:10},{wch:8},{wch:11},{wch:9}];
+  XLSX.utils.book_append_sheet(wb, ws, m);
+  const out = XLSX.write(wb, {bookType:'xlsx', type:'array'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([out], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+  a.download = `الحضور والغياب ${m}.xlsx`; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+
+/* ---------- الإعدادات ---------- */
+function vSettings(){
+  head('الإعدادات', ME.name);
+  return `<div class="card"><h2>حسابك</h2>
+    <div class="field"><label>اسمك كما يظهر في السجل («رصده ...»)</label><input type="text" data-in="myname" value="${esc(ME.name)}"></div>
+    <p class="hint">البريد: <bdi dir="ltr">${esc(ME.email)}</bdi></p></div>
+  <div class="card"><h2>سياسة المدرسة</h2>
+    <div class="field"><label>ساعة بداية الدوام (أي دخول بعدها = تأخير)</label><input type="time" data-in="cutoff" value="${esc(cutoff())}"></div>
+    <div class="field"><label>وقت تجهيز الإشعارات</label><input type="time" data-in="ntime" value="${esc(notifyTime())}"></div>
+    <div class="field"><label>اسم المدرسة (يظهر في الرسائل)</label><input type="text" data-in="school" value="${esc(school())}"></div></div>
+  <div class="card"><h2>المستخدمون</h2>
+    ${Object.entries(DB.users).map(([id,n])=>`<div class="kv"><span>${esc(n)}${id===ME.id?' (أنت)':''}</span><span class="pill ok">صلاحيات كاملة</span></div>`).join('')}
+    <p class="hint">إضافة مستخدم: من لوحة Supabase ← Authentication ← Add user، ويظهر هنا تلقائياً بعد أول دخول له.</p></div>
+  <div class="card"><h2>التاريخ المعروض</h2>
+    <div class="field"><label>يوم الرصد</label><input type="date" data-in="day" value="${esc(DAY)}" max="${esc(today())}"></div>
+    <p class="hint">للرصد المتأخر أو مراجعة يوم سابق. ارجع إلى اليوم الحالي بعد الانتهاء.</p>
+    ${DAY!==today()? `<button class="btn pri" data-a="resetDay">العودة إلى اليوم</button>`:''}</div>`;
+}
+
+/* ===================== الأحداث ===================== */
+const A = {
+  back(){ go(view.t==='sec'?'secs': ['students','report','settings'].includes(view.t)?'more':'today'); },
+  tab(d){ go(d.tab); },
+  refresh: async ()=>{ toast('جارٍ التحديث...'); await loadBase(true); await loadDay(); await flush(); render(); toast('تم التحديث'); },
+  async login(){
+    const em = ($('lem')||{}).value, pw = ($('lpw')||{}).value;
+    if(!em || !pw){ $('lerr').textContent='أدخل البريد وكلمة المرور'; return; }
+    $('lerr').innerHTML = 'جارٍ الدخول <span class="spin"></span>';
+    const { data, error } = await sb.auth.signInWithPassword({ email:em.trim(), password:pw });
+    if(error){ $('lerr').textContent = 'تعذّر الدخول: ' + error.message; return; }
+    await boot(data.user);
+  },
+  async logout(){ await sb.auth.signOut(); ME=null; localStorage.removeItem(CK); render(); },
+  stu(d){ const id=+d.id; HIST[id] = HIST[id]; go('stu',{id}); loadHist([id]).then(()=>render()); setTimeout(()=>loadTimeline(id), 60); },
+  att(d){ setAtt(+d.id, { status:d.v, by_status:ME.id }); },
+  markSec(d){ markSection(+d.sec); toast('ثُبّت رصد الشعبة'); },
+  checkin(d){ const t = nowHM();
+    if(isLate(t)) setAtt(+d.id, { status:'present', late_at:t, by_late:ME.id, by_status:ME.id });
+    else setAtt(+d.id, { status:'present', by_status:ME.id });
+    toast(isLate(t)? 'سُجّل تأخيراً '+t : 'سُجّل حضوره في وقته'); },
+  undolate(d){ setAtt(+d.id, { late_at:null, by_late:ME.id }); },
+  uni(d){ const r = rec(+d.id); setAtt(+d.id, { uniform_violation: !r.uniform_violation, by_uniform:ME.id }); },
+  leave(d){ setAtt(+d.id, { leave_at: nowHM(), leave_reason: d.r, by_leave:ME.id }); toast('سُجّلت المغادرة'); },
+  unleave(d){ setAtt(+d.id, { leave_at:null, leave_reason:null, by_leave:ME.id }); },
+  send(d){
+    const ids = d.ids.split(',').map(Number);
+    const g = { phone: waNum((DB.students.find(s=>s.id===ids[0])||{}).guardian_phone), students: ids.map(i=>DB.students.find(s=>s.id===i)).filter(Boolean) };
+    const body = msgFor(g);
+    ids.forEach(i=>{ SENT[i] = new Date().toISOString();
+      enqueue({ t:'notifications', op:'insert', row:{ student_id:i, day:DAY, sent_by:ME.id, body } }); });
+    view.open = d.ids;
+    const url = /Android/i.test(navigator.userAgent)
+      ? `whatsapp://send?phone=${g.phone}&text=${encodeURIComponent(body)}`
+      : `https://wa.me/${g.phone}?text=${encodeURIComponent(body)}`;
+    location.href = url;
+    setTimeout(render, 600);
+  },
+  markSent(d){ d.ids.split(',').map(Number).forEach(i=>{ SENT[i]=new Date().toISOString(); }); render(); },
+  async copyMsg(d){
+    const ids = d.ids.split(',').map(Number);
+    const g = { phone:null, students: ids.map(i=>DB.students.find(s=>s.id===i)).filter(Boolean) };
+    try{ await navigator.clipboard.writeText(msgFor(g)); toast('نُسخ النص'); }catch(e){ toast('تعذّر النسخ'); }
+  },
+  async copyAbs(){
+    const t = DB.students.filter(s=>{ const r=REC[s.id]; return r && r.status==='absent'; })
+      .map(s=>`${s.name} — ${secName(s.section_id)}`).join('\n');
+    try{ await navigator.clipboard.writeText(`غائبو ${dayLabel(DAY)}\n${t}`); toast('نُسخت القائمة'); }catch(e){ toast('تعذّر النسخ'); }
+  },
+  waTest(d){ const s = DB.students.find(x=>x.id===+d.id); const n = waNum(s.guardian_phone);
+    if(!n){ toast('الرقم غير صحيح'); return; }
+    location.href = /Android/i.test(navigator.userAgent) ? `whatsapp://send?phone=${n}` : `https://wa.me/${n}`; },
+  verify(d){ const s = DB.students.find(x=>x.id===+d.id); setPhone(s.id, s.guardian_phone, !s.phone_verified); },
+  needToggle(){ view.need = !view.need; render(); },
+  runRep(){ runReport(); },
+  xl(){ exportXl(); },
+  resetDay(){ DAY = today(); loadDay().then(render); }
+};
+document.addEventListener('click', e=>{
+  const t = e.target.closest('[data-a]'); if(t && A[t.dataset.a]){ A[t.dataset.a](t.dataset); return; }
+  const nb = e.target.closest('[data-tab]'); if(nb){ go(nb.dataset.tab); return; }
+  const sr = e.target.closest('[data-sec]'); if(sr){ go('sec',{sec:+sr.dataset.sec}); return; }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Enter' && (e.target.id==='lpw'||e.target.id==='lem')) A.login(); });
+document.addEventListener('input', e=>{
+  const el = e.target;
+  if(el.id === 'q'){ view.q = el.value; const p = el.selectionStart; render();
+    const n = $('q'); if(n){ n.focus(); try{ n.setSelectionRange(p,p); }catch(x){} } return; }
+});
+document.addEventListener('change', e=>{
+  const el = e.target, d = el.dataset; if(!d.in) return;
+  if(d.in === 'phone'){ setPhone(+d.id, el.value.trim(), false); toast('حُفظ الرقم'); render(); }
+  else if(d.in === 'cutoff'){ setSetting('late_cutoff', el.value); toast('حُفظت ساعة الدوام'); }
+  else if(d.in === 'ntime'){ setSetting('notify_time', el.value); toast('حُفظ وقت الإشعار'); }
+  else if(d.in === 'school'){ setSetting('school', el.value); toast('حُفظ الاسم'); }
+  else if(d.in === 'myname'){ const n = el.value.trim() || ME.email.split('@')[0];
+    ME.name = n; DB.users[ME.id] = n; lsSet(CK, DB);
+    enqueue({ t:'app_users', op:'upsert', conflict:'id', row:{id:ME.id, name:n} }); toast('حُفظ اسمك'); }
+  else if(d.in === 'day'){ DAY = el.value; loadDay().then(render); }
+});
+
+/* ===================== التشغيل ===================== */
+async function boot(user){
+  ME = { id:user.id, email:user.email, name:user.email };
+  render();
+  await loadBase(false);
+  ME.name = user.email.split('@')[0];
+  const u = await sb.from('app_users').select('name').eq('id', user.id).maybeSingle();
+  if(u.data && u.data.name) ME.name = u.data.name;
+  else enqueue({ t:'app_users', op:'upsert', conflict:'id', row:{id:user.id, name:ME.name} });
+  DB.users[ME.id] = ME.name;
+  await loadDay();
+  await loadHist(flagged().map(s=>s.id));
+  render();
+  flush();
+}
+(async ()=>{
+  const { data } = await sb.auth.getSession();
+  if(data.session) await boot(data.session.user); else render();
+  setInterval(()=>{ if(document.visibilityState==='visible' && ME && navigator.onLine){ loadDay(true).then(render); flush(); } }, 60000);
+  document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible' && ME){ loadDay(true).then(render); flush(); } });
+})();
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
