@@ -1,5 +1,5 @@
 // حضور — التخزين المحلي لملفات التطبيق فقط (طلبات الخادم تمر دائماً عبر الشبكة)
-const CACHE = 'hd-v1';
+const CACHE = 'hd-v3';
 const ASSETS = ['./','./index.html','./supabase.js','./xlsx.full.min.js','./591.supabase.js','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.allSettled(ASSETS.map(a => c.add(a)))).then(() => self.skipWaiting()));

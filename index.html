@@ -155,7 +155,8 @@ async function flush(){
   while(QUEUE.length){
     const j = QUEUE[0];
     let res;
-    if(j.op === 'insert') res = await sb.from(j.t).insert(j.row);
+    if(j.op === 'delete') res = await sb.from(j.t).delete().eq('id', j.id);
+    else if(j.op === 'insert') res = await sb.from(j.t).insert(j.row);
     else if(j.op === 'update') res = await sb.from(j.t).update(j.row).eq('id', j.id);
     else res = await sb.from(j.t).upsert(j.row, { onConflict:j.conflict });
     if(res.error){
@@ -178,13 +179,13 @@ async function loadBase(force){
   if(!navigator.onLine) return;
   const [se, st, cf, us] = await Promise.all([
     sb.from('sections').select('id,name').order('id'),
-    sb.from('students').select('id,name,section_id,guardian_phone,phone_verified,active').eq('active', true).order('name'),
+    sb.from('students').select('id,name,section_id,guardian_phone,phone_verified,active').order('name'),
     sb.from('settings').select('key,value'),
     sb.from('app_users').select('id,name')
   ]);
   if(se.error || st.error){ toast('تعذّر تحميل البيانات: ' + ((se.error||st.error).message)); return; }
   DB.sections = se.data || [];
-  DB.students = st.data || [];
+  DB.students = (st.data || []).filter(s => s.active !== false);
   DB.settings = {}; (cf.data||[]).forEach(r=> DB.settings[r.key] = r.value);
   DB.users = {}; (us.data||[]).forEach(u=> DB.users[u.id] = u.name);
   lsSet(CK, DB);
@@ -496,6 +497,7 @@ function vStudents(){
           <input type="tel" inputmode="tel" dir="ltr" data-in="phone" data-id="${s.id}" value="${esc(s.guardian_phone||'')}" placeholder="07xxxxxxxx" style="flex:1;min-width:130px">
           ${ok? `<button class="btn sm" data-a="waTest" data-id="${s.id}">واتساب</button>
                  <button class="btn sm ${s.phone_verified?'':'pri'}" data-a="verify" data-id="${s.id}">${s.phone_verified?'إلغاء':'تحقق'}</button>`:''}
+          <button class="btn sm danger" data-a="del" data-id="${s.id}" title="حذف نهائي">حذف</button>
         </div></div>`;}).join('') : `<div class="st"><span class="note">${view.need? 'لا أرقام تحتاج تحقق.' : 'اكتب حرفين للبحث، أو اضغط زر «أرقام تحتاج تحقق».'}</span></div>`}</div>`;
 }
 
@@ -524,6 +526,9 @@ function vStu(){
     <div class="row">${waNum(s.guardian_phone)? `<button class="btn" data-a="waTest" data-id="${s.id}">فتح واتساب</button>
       <button class="btn ${s.phone_verified?'':'pri'}" data-a="verify" data-id="${s.id}">${s.phone_verified?'إلغاء التحقق':'تأكيد أن عليه واتساب'}</button>`:'<span class="note">أدخل رقماً صحيحاً بصيغة 07xxxxxxxx</span>'}</div>
   </div>
+  <div class="card"><h2>حذف الطالب (نقل من المدرسة)</h2>
+    <p class="note">حذف نهائي: يُمسح الطالب وكل سجله من قاعدة البيانات ولا يمكن الرجوع عن ذلك. يسألك التطبيق مرتين قبل التنفيذ.</p>
+    <div class="row" style="margin-top:8px"><button class="btn danger" data-a="del" data-id="${s.id}">حذف الطالب نهائياً</button></div></div>
   <div class="card"><h2>سجل الطالب</h2><div id="tl"><span class="note">جارٍ التحميل <span class="spin"></span></span></div></div>`;
 }
 async function loadTimeline(id){
@@ -658,6 +663,15 @@ const A = {
     location.href = /Android/i.test(navigator.userAgent) ? `whatsapp://send?phone=${n}` : `https://wa.me/${n}`; },
   verify(d){ const s = DB.students.find(x=>x.id===+d.id); setPhone(s.id, s.guardian_phone, !s.phone_verified); },
   needToggle(){ view.need = !view.need; render(); },
+  del(d){
+    const s = DB.students.find(x=>x.id===+d.id); if(!s) return;
+    if(!confirm(`حذف الطالب «${s.name}» (${secName(s.section_id)}) حذفاً نهائياً؟\n\nيُحذف الطالب وكل سجله (الغياب والتأخير والزي والمغادرات والإشعارات) من قاعدة البيانات، ولا يمكن الرجوع عن ذلك.`)) return;
+    if(!confirm(`تأكيد أخير: حذف «${s.name}» نهائياً؟`)) return;
+    DB.students = DB.students.filter(x=>x.id!==s.id); delete REC[s.id]; delete SENT[s.id]; delete HIST[s.id]; lsSet(CK, DB);
+    enqueue({ t:'students', op:'delete', id:s.id });
+    toast('حُذف الطالب نهائياً');
+    if(view.t==='stu') go('students'); else render();
+  },
   runRep(){ runReport(); },
   xl(){ exportXl(); },
   resetDay(){ DAY = today(); loadDay().then(render); }
